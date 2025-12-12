@@ -2,8 +2,10 @@
 
 A modern, responsive Job Portal application built with the **MERN Stack** (MongoDB, Express, React, Node.js). This application features a glassmorphism UI, secure user authentication, and real-time job searching using external APIs.
 
-[Job Portal Demo]
+## [Job Portal Demo]
 <img width="1915" height="1023" alt="Screenshot 2025-12-12 165949" src="https://github.com/user-attachments/assets/5cc9dcd1-6f9e-4158-8269-95d91a4ef41f" />
+<img width="1908" height="972" alt="image" src="https://github.com/user-attachments/assets/399fece4-1fb5-471c-a55d-2349ff4de891" />
+
 
 
 
@@ -23,6 +25,49 @@ A modern, responsive Job Portal application built with the **MERN Stack** (Mongo
 - **⚡ Admin Features:** Users can Post and Delete their own local jobs.
 
 ---
+## 🚀 How to Run Locally
+
+If you want to run this project on your own machine, follow these steps:
+
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/YOUR_USERNAME/job-portal.git](https://github.com/YOUR_USERNAME/job-portal.git)
+cd job-portal
+```
+### 2.Setup Backend
+```bash
+cd server
+npm install
+
+> Create a .env file in the server folder (optional) or hardcode your DB string.
+
+> Update index.js with your MongoDB connection string.
+```
+```bash
+node index.js
+
+Server runs on http://localhost:5000
+```
+
+### 3. Setup Frontend
+Open a new terminal:
+```bash
+cd client
+npm install
+npm start
+```
+Client runs on http://localhost:3000
+### Step 2: Push it to GitHub
+Now send this new file to your repository so it shows up on the front page.
+
+1.  Open Terminal.
+2.  Run:
+    ```powershell
+    git add .
+    git commit -m "Add project documentation"
+    git push origin main
+    ```
+
 
 ## 🛠️ Tech Stack
 - **Frontend:** React.js, React Router, CSS3 (Animations & Glassmorphism).
@@ -49,6 +94,6 @@ job-portal/
 │   ├── index.js            # Main Server Logic (Routes & DB Connection)
 │   └── package.json
 └── README.md               # Documentation
-
-👨‍💻 Developed By
-Samar Anand
+```
+## 👨‍💻 Developed By
+   Samar Anand
