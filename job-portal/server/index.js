@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 // --- Database Connection ---
-const DB_URI = "mongodb://localhost:27017/job-portal"; 
+const DB_URI = "mongodb+srv://Samar:samar123@cluster0.woujhfa.mongodb.net/?appName=Cluster0"; 
 mongoose.connect(DB_URI)
     .then(() => console.log("✅ Connected to MongoDB"))
     .catch((err) => console.error("❌ Connection Error:", err));
