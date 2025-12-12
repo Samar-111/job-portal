@@ -1,0 +1,546 @@
+/* 1. IMPORT FONT */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* 2. BACKGROUND IMAGE WITH DARK OVERLAY */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  /* The magic line: A dark shadow overlay + The image URL */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+              url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+  
+  background-size: cover;       /* Ensure image covers the whole screen */
+  background-position: center;  /* Center the image */
+  background-attachment: fixed; /* Background stays still when you scroll */
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* 3. LAYOUT */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* 4. HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Shadow makes text readable on any image */
+}
+
+.header h1 {
+  font-size: 3.5rem;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-weight: 300;
+  margin-top: 10px;
+}
+
+/* 5. GLASS FORM */
+.job-form {
+  /* Slightly more opaque so it stands out against the busy photo */
+  background: rgba(255, 255, 255, 0.15); 
+  backdrop-filter: blur(15px); /* Stronger blur for readability */
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  gap: 15px;
+  margin-bottom: 50px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  flex-wrap: wrap;
+}
+
+.form-input {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9); /* Almost white input for easy typing */
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  transition: 0.3s;
+}
+
+.form-input:focus {
+  background: #fff;
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+
+/* 6. BUTTONS */
+.btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-add {
+  background: #3498db; /* Professional Blue */
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-add:hover {
+  background: #2980b9;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* 7. GLASS JOB CARDS */
+
+.job-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Forces 3 columns */
+  gap: 25px; /* Space between cards */
+  padding-bottom: 50px;
+}
+
+/* Responsive: On mobile, switch back to 1 column so it doesn't look squished */
+@media (max-width: 768px) {
+  .job-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.job-card {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  justify-content: space-between; /* Push button to bottom */
+  align-items: flex-start; /* Align text to left */
+  height: 250px; /* Fixed height makes them look uniform */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy hover effect */
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* THE HOVER EFFECT */
+.job-card:hover {
+  transform: translateY(-10px) scale(1.03); /* Moves up and grows */
+  background: rgba(0, 0, 0, 0.8); /* Gets darker */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5); /* Big glow shadow */
+  border-color: #00ff88; /* Border turns green */
+}
+
+/* Add a cool gradient glow behind the card on hover */
+.job-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+  transform: translateX(-100%);
+  transition: 0.5s;
+}
+
+.job-card:hover::before {
+  transform: translateX(100%); /* Shine effect moves across */
+}
+
+.job-info {
+  width: 100%;
+}
+
+.job-info h3 { 
+  margin: 0 0 10px 0; 
+  font-size: 1.4rem; 
+  color: #fff;
+  line-height: 1.3;
+}
+
+.job-info p { 
+  margin: 5px 0; 
+  color: #ccc; 
+  font-size: 0.95rem; 
+}
+
+/* BUTTONS inside the cards */
+.btn-delete, .apply-link {
+  margin-top: auto; /* Pushes button to the very bottom */
+  width: 100%;      /* Full width button looks better in grid */
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-delete {
+  background: rgba(231, 76, 60, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(231, 76, 60, 0.5);
+}
+
+.btn-delete:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+/* Style for the "Apply" link */
+.job-card a {
+  display: block;
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background: rgba(0, 255, 136, 0.1);
+  color: #00ff88;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.job-card a:hover {
+  background: #00ff88;
+  color: black;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+}
+/* SEARCH BAR STYLE */
+.search-bar {
+  width: 60%;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 30px;
+  border: none;
+  font-size: 18px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-bar:focus {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+/* SUGGESTION DROPDOWN BOX */
+.suggestions-list {
+  position: absolute; /* Floats on top of other content */
+  top: 60px;          /* Pushes it right below the search bar */
+  left: 0;
+  width: 100%;        /* Matches search bar width */
+  background: white;
+  list-style: none;   /* Removes bullet points */
+  padding: 0;
+  margin: 0;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  z-index: 100;       /* Ensures it sits ON TOP of everything else */
+  overflow: hidden;
+}
+
+.suggestions-list li {
+  padding: 15px;
+  color: #333;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+  transition: background 0.2s;
+  text-align: left;   /* Align text to the left */
+}
+
+.suggestions-list li:hover {
+  background-color: #f0f2f5;
+  color: #0052d4;     /* Blue text on hover */
+  font-weight: 600;
+}
+
+.suggestions-list li:last-child {
+  border-bottom: none; /* No line on the last item */
+}
+/* --- NEW AESTHETIC FEATURES --- */
+
+/* 1. FLOATING BACKGROUND SHAPES */
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  z-index: -1; /* Behind the glass */
+  opacity: 0.6;
+  animation: float 8s ease-in-out infinite;
+}
+
+.shape-1 {
+  width: 200px;
+  height: 200px;
+  background: #ff00cc;
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 300px;
+  height: 300px;
+  background: #3333ff;
+  bottom: 20%;
+  right: 10%;
+  animation-delay: 2s;
+}
+
+.shape-3 {
+  width: 150px;
+  height: 150px;
+  background: #00ffcc;
+  top: 40%;
+  right: 30%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+/* 2. STATS BOX ON HOME PAGE */
+.stats-container {
+  display: flex;
+  gap: 30px;
+  margin-top: 40px;
+  justify-content: center;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  padding: 15px 25px;
+  border-radius: 15px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: transform 0.3s;
+}
+
+.stat-box:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #00ff88;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* 3. TRENDING TAGS (Pills) */
+.tags-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.tag-pill {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.2s;
+}
+
+.tag-pill:hover {
+  background: #fff;
+  color: #333;
+  transform: scale(1.05);
+}
+/* --- FLOATING NAVBAR --- */
+.navbar {
+  position: fixed; /* Stick to the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between; /* Logo left, buttons right */
+  align-items: center;
+  z-index: 1000; /* On top of everything */
+  box-sizing: border-box; /* Ensures padding doesn't break width */
+  
+  /* Glass Effect */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-item {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: #00ff88; /* Green accent on hover */
+}
+/* --- MODAL (POPUP) STYLES --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Dark background behind popup */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Sit on top of Navbar */
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px); /* Strong blur */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  position: relative;
+  transform: translateY(0);
+  animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 10px;
+}
+
+.developer-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00ff88; /* Neon Green */
+  margin-top: 20px;
+  display: block;
+}
+
+.close-btn {
+  background: #ff4757;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 20px;
+  margin-top: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.close-btn:hover {
+  transform: scale(1.05);
+  background: #ff6b81;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(50px); } to { transform: translateY(0); } }
+/* --- AUTH PAGES (LOGIN/REGISTER) --- */
+.auth-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.auth-box {
+  background: rgba(0, 0, 0, 0.6); /* Dark Glass */
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.auth-title {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box; /* Fixes padding issues */
+}
+
+.auth-input::placeholder { color: #ccc; }
+
+.auth-input:focus {
+  border-color: #00ff88;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.auth-link {
+  color: #00ff88;
+  cursor: pointer;
+  margin-top: 15px;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.auth-link:hover { text-decoration: underline; }
