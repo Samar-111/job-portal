@@ -20,7 +20,7 @@ function JobPage() {
     const fetchAllJobs = async () => {
       setLoading(true);
       try {
-        const localRes = await fetch('http://localhost:5000/jobs');
+        const localRes = await fetch('https://job-portal-nhpx.onrender.com/jobs');
         const localData = await localRes.json();
         setLocalJobs(localData);
 
@@ -86,7 +86,7 @@ function JobPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // ... (Your existing submit logic)
-    const response = await fetch('http://localhost:5000/jobs', {
+    const response = await fetch('https://job-portal-nhpx.onrender.com/jobs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
@@ -99,7 +99,7 @@ function JobPage() {
   };
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:5000/jobs/${id}`, { method: 'DELETE' });
+    await fetch(`https://job-portal-nhpx.onrender.com/jobs/${id}`, { method: 'DELETE' });
     setLocalJobs(localJobs.filter(job => job._id !== id));
   };
 
