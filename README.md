@@ -2,7 +2,7 @@
 
 A modern, responsive Job Portal application built with the **MERN Stack** (MongoDB, Express, React, Node.js). This application features a glassmorphism UI, secure user authentication, and real-time job searching using external APIs.
 
-![Job Portal Demo](<img width="1915" height="1023" alt="Screenshot 2025-12-12 165949" src="https://github.com/user-attachments/assets/32b4cd4a-172e-4c7f-8965-d41444fa8093" />
+![Job Portal Demo]("https://github.com/user-attachments/assets/32b4cd4a-172e-4c7f-8965-d41444fa8093" )
 )
 
 
