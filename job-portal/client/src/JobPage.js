@@ -6,7 +6,6 @@ function JobPage() {
   const [externalJobs, setExternalJobs] = useState([]); 
   const [searchTerm, setSearchTerm] = useState(""); 
   
-  // Smart Search Suggestions State
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false); 
 
@@ -14,17 +13,27 @@ function JobPage() {
 
   const trendingTags = ["Remote", "JavaScript", "Python", "Design", "Marketing"];
 
-  // 1. Fetch Data (Local + Remote API)
   useEffect(() => {
     const fetchAllJobs = async () => {
       setLoading(true);
-      try {
-        // Fetch Local Jobs (Your Database)
-        const localRes = await fetch('https://job-portal-nhpx.onrender.com/jobs');
-        const localData = await localRes.json();
-        setLocalJobs(localData);
 
-        // Fetch External Jobs (Remotive API)
+      // --- FETCH 1: Local Jobs (Your Database) ---
+      // We put this in its own try/catch so it doesn't break the page if backend is sleeping
+      try {
+        const localRes = await fetch('https://job-portal-nhpx.onrender.com'); 
+        if (localRes.ok) {
+            const localData = await localRes.json();
+            setLocalJobs(localData);
+        } else {
+            console.log("Backend might be asleep, skipping local jobs.");
+        }
+      } catch (error) { 
+        console.error("Error fetching local jobs:", error); 
+      }
+
+      // --- FETCH 2: External Jobs (Remotive API) ---
+      // This runs even if FETCH 1 fails!
+      try {
         const apiRes = await fetch('https://remotive.com/api/remote-jobs?category=software-dev&limit=100');
         const apiData = await apiRes.json();
         
@@ -38,15 +47,19 @@ function JobPage() {
         }));
         
         setExternalJobs(formattedExternalJobs);
-      } catch (error) { console.error(error); }
+      } catch (error) { 
+        console.error("Error fetching external jobs:", error); 
+      }
+
       setLoading(false);
     };
+
     fetchAllJobs();
   }, []);
 
   const allJobs = [...localJobs, ...externalJobs];
 
-  // 2. Smart Suggestions Logic
+  // Suggestions Logic
   useEffect(() => {
     if (searchTerm.length > 1) {
       const allTitles = allJobs.map(job => job.title);
@@ -54,7 +67,6 @@ function JobPage() {
         title.toLowerCase().includes(searchTerm.toLowerCase())
       );
       const uniqueMatches = [...new Set(matches)];
-      
       setSuggestions(uniqueMatches);
       setShowSuggestions(true);
     } else { 
@@ -62,23 +74,8 @@ function JobPage() {
     }
   }, [searchTerm]); 
 
-  // --- Handlers ---
-
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      setShowSuggestions(false); 
-    }
-  };
-
-  const handleSuggestionClick = (title) => {
-    setSearchTerm(title);
-    setShowSuggestions(false);
-  };
-
-  const handleBlur = () => {
-    setTimeout(() => {
-      setShowSuggestions(false);
-    }, 200);
+    if (e.key === 'Enter') setShowSuggestions(false); 
   };
 
   const filteredJobs = allJobs.filter(job => 
@@ -88,14 +85,12 @@ function JobPage() {
 
   return (
     <div className="container">
-      {/* Background Shapes */}
       <div className="shape shape-1" style={{top: "-10%", left: "-10%"}}></div>
       <div className="shape shape-3" style={{bottom: "10%", right: "-5%"}}></div>
 
       <div className="header">
         <h1>🔍 Find Your Dream Job</h1>
         <div style={{ position: 'relative', width: '70%', margin: '0 auto' }}>
-            
             <input 
               type="text" 
               placeholder="Search by title..." 
@@ -104,14 +99,13 @@ function JobPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown} 
               onFocus={() => setShowSuggestions(true)}
-              onBlur={handleBlur}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
             />
             
-            {/* Auto-Suggestions List */}
             {showSuggestions && suggestions.length > 0 && (
                 <ul className="suggestions-list">
                     {suggestions.slice(0, 6).map((title, index) => (
-                        <li key={index} onClick={() => handleSuggestionClick(title)}>
+                        <li key={index} onClick={() => { setSearchTerm(title); setShowSuggestions(false); }}>
                             {title}
                         </li>
                     ))}
@@ -126,7 +120,6 @@ function JobPage() {
                 </div>
               ))}
             </div>
-
         </div>
       </div>
 
@@ -134,23 +127,20 @@ function JobPage() {
         {loading ? (
            <h2 style={{textAlign: "center", color: "white"}}>Loading Jobs...</h2>
         ) : filteredJobs.length === 0 ? (
-           <p style={{textAlign:"center", color:"white"}}>No jobs found matching "{searchTerm}"</p>
+           <div style={{textAlign: "center", color: "white"}}>
+             <h2>No jobs found matching "{searchTerm}"</h2>
+             <p>Try searching for "Developer" or "Designer"</p>
+           </div>
         ) : (
            filteredJobs.map((job) => (
              <div key={job._id} className="job-card" style={job.isExternal ? { borderLeft: "5px solid #00ff88" } : {}}>
                <div className="job-info">
                  <h3>{job.title}</h3>
                  <p>🏢 {job.company} • 📍 {job.location}</p>
-                 
-                 {/* Apply Button for Everyone */}
-                 {job.isExternal ? (
-                   <a href={job.url} target="_blank" rel="noopener noreferrer" 
-                      style={{ color: "#00ff88", textDecoration: "none", fontWeight: "bold", fontSize: "14px" }}>
-                      Apply on Website ↗
-                   </a>
-                 ) : (
-                    <span style={{color: "rgba(255,255,255,0.5)", fontSize: "14px"}}>Apply via Email</span>
-                 )}
+                 <a href={job.url} target="_blank" rel="noopener noreferrer" 
+                    style={{ color: "#00ff88", textDecoration: "none", fontWeight: "bold", fontSize: "14px" }}>
+                    Apply on Website ↗
+                 </a>
                </div>
              </div>
            ))
