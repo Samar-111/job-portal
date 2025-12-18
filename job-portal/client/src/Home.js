@@ -4,7 +4,6 @@ import './App.css';
 
 function Home() {
   const navigate = useNavigate();
-  const username = localStorage.getItem("username");
   
   // State to control which popup is open (null = none, 'about' = About Us, 'companies' = Companies)
   const [activeModal, setActiveModal] = useState(null);
@@ -18,13 +17,6 @@ function Home() {
       <nav className="navbar">
         <div className="nav-logo">JobPortal<span style={{color:"#00ff88"}}>.</span></div>
         <div className="nav-links">
-            {/* Show Username if logged in */}
-    {username && (
-      <span style={{color: "white", marginRight: "20px", fontWeight: "bold"}}>
-        Hello, {username} 👋
-      </span>
-    )}
-          {/* Removed "Home" as requested */}
           
           <span className="nav-item" onClick={() => setActiveModal('companies')}>
             Top Companies
@@ -34,7 +26,7 @@ function Home() {
             About Us
           </span>
 
-          <span className="nav-item" onClick={() => navigate('/dashboard')} style={{border: "1px solid #00ff88", padding: "5px 15px", borderRadius: "20px", color: "#00ff88"}}>
+          <span className="nav-item" onClick={() => navigate('/jobs')} style={{border: "1px solid #00ff88", padding: "5px 15px", borderRadius: "20px", color: "#00ff88"}}>
             Find Jobs
           </span>
         </div>
@@ -55,7 +47,7 @@ function Home() {
       <button 
         className="btn btn-add" 
         style={{ padding: "18px 40px", fontSize: "18px", zIndex: 10, borderRadius: "50px" }}
-        onClick={() => navigate('/dashboard')}
+        onClick={() => navigate('/jobs')}
       >
         Browse Openings 🚀
       </button>
