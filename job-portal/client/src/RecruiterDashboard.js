@@ -23,6 +23,7 @@ function RecruiterDashboard() {
       return;
     }
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, role]);
 
   const fetchData = async () => {

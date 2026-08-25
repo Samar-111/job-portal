@@ -40,6 +40,7 @@ function JobPage() {
   useEffect(() => {
     fetchProfile();
     fetchAllJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterLocation, filterSalary, filterJobType, filterSkills]);
 
   const fetchProfile = async () => {
@@ -133,6 +134,7 @@ function JobPage() {
     } else {
       setShowSuggestions(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
   const handleSearchSubmit = (e) => {
