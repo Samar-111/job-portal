@@ -544,3 +544,50 @@ body {
 }
 
 .auth-link:hover { text-decoration: underline; }
+
+/* Custom Premium Enhancements */
+.nav-item.active {
+  color: #00ff88;
+  font-weight: bold;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 77, 77, 0.15);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.stat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 255, 136, 0.15);
+}
+
+.role-option {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.role-option:hover {
+  transform: scale(1.02);
+}
