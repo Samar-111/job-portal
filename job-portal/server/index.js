@@ -22,18 +22,18 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);
 }
 
-// --- Middleware ---
+
 app.use(express.json());
 app.use(cors());
 app.use('/uploads', express.static(uploadsDir));
 
-// --- Database Connection ---
+
 const DB_URI = process.env.MONGO_URI || "mongodb+srv://Samar:samar123@cluster0.woujhfa.mongodb.net/?appName=Cluster0"; 
 mongoose.connect(DB_URI)
     .then(() => console.log("✅ Connected to MongoDB"))
     .catch((err) => console.error("❌ Connection Error:", err));
 
-// --- Multer Configuration for Resume Uploads ---
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadsDir);
@@ -57,9 +57,7 @@ const upload = multer({
     }
 });
 
-// --- ROUTES ---
 
-// 1. REGISTER
 app.post('/register', async (req, res) => {
     console.log("➡️ Register Attempt:", req.body);
     try {
@@ -74,7 +72,7 @@ app.post('/register', async (req, res) => {
             return res.status(400).json({ error: "User already exists with that username or email" });
         }
 
-        // Hash password
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -87,7 +85,6 @@ app.post('/register', async (req, res) => {
 
         await user.save();
         
-        // Generate Token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'secret_key_12345', { expiresIn: '7d' });
 
         res.json({
@@ -105,7 +102,6 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// 2. LOGIN
 app.post('/login', async (req, res) => {
     console.log("➡️ Login Attempt:", req.body);
     try {
@@ -115,7 +111,6 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ error: "Please enter all fields" });
         }
 
-        // Login with either username or email
         const user = await User.findOne({ $or: [{ username }, { email: username }] });
         if (!user) {
             return res.status(400).json({ error: "User not found" });
@@ -143,7 +138,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// 3. GET CURRENT USER PROFILE
 app.get('/profile/me', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user._id)
@@ -155,7 +149,6 @@ app.get('/profile/me', auth, async (req, res) => {
     }
 });
 
-// 4. UPDATE PROFILE INFO
 app.put('/profile/me', auth, async (req, res) => {
     try {
         const { fullName, bio, skills } = req.body;
@@ -185,7 +178,6 @@ app.put('/profile/me', auth, async (req, res) => {
     }
 });
 
-// 5. UPLOAD RESUME
 app.post('/profile/resume', auth, upload.single('resume'), async (req, res) => {
     try {
         if (!req.file) {
@@ -212,7 +204,6 @@ app.post('/profile/resume', auth, upload.single('resume'), async (req, res) => {
     }
 });
 
-// 6. GET ALL JOBS (WITH FILTERING AND POPULATED DATA)
 app.get('/jobs', async (req, res) => {
     try {
         const { location, salary, jobType, skills, search } = req.query;
@@ -248,7 +239,6 @@ app.get('/jobs', async (req, res) => {
     }
 });
 
-// 7. POST A JOB
 app.post('/jobs', auth, async (req, res) => {
     try {
         const { title, company, location, salary, description, skillsRequired, jobType } = req.body;
@@ -273,7 +263,6 @@ app.post('/jobs', auth, async (req, res) => {
 
         const savedJob = await newJob.save();
 
-        // Check Job Alerts and log email notifications (Mock Service)
         const alerts = await Alert.find({
             $or: [
                 { keyword: { $regex: title, $options: 'i' } },
@@ -291,7 +280,6 @@ app.post('/jobs', auth, async (req, res) => {
     }
 });
 
-// 8. DELETE A JOB
 app.delete('/jobs/:id', auth, async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);
@@ -299,7 +287,6 @@ app.delete('/jobs/:id', auth, async (req, res) => {
             return res.status(404).json({ error: "Job not found" });
         }
 
-        // Recruiters can delete their own jobs
         if (job.postedBy && job.postedBy.toString() !== req.user._id.toString()) {
             return res.status(401).json({ error: "Not authorized to delete this job" });
         }
@@ -311,7 +298,6 @@ app.delete('/jobs/:id', auth, async (req, res) => {
     }
 });
 
-// 9. APPLY FOR JOB
 app.post('/jobs/:id/apply', auth, async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);
@@ -319,13 +305,11 @@ app.post('/jobs/:id/apply', auth, async (req, res) => {
             return res.status(404).json({ error: "Job not found" });
         }
 
-        // Check if already applied
         const alreadyApplied = job.applications.some(app => app.candidate.toString() === req.user._id.toString());
         if (alreadyApplied) {
             return res.status(400).json({ error: "You have already applied to this job." });
         }
 
-        // Fetch user resume details
         const candidateUser = await User.findById(req.user._id);
         if (!candidateUser.profile.resumeUrl) {
             return res.status(400).json({ error: "Please upload your resume in your profile page before applying." });
@@ -345,7 +329,6 @@ app.post('/jobs/:id/apply', auth, async (req, res) => {
     }
 });
 
-// 10. UPDATE APPLICATION STATUS (RECRUITER ONLY)
 app.put('/jobs/:id/applications/:appId', auth, async (req, res) => {
     try {
         const { status } = req.body;
@@ -371,7 +354,6 @@ app.put('/jobs/:id/applications/:appId', auth, async (req, res) => {
     }
 });
 
-// 11. SAVE / WISHLIST A JOB
 app.post('/jobs/:id/save', auth, async (req, res) => {
     try {
         const jobId = req.params.id;
@@ -391,7 +373,6 @@ app.post('/jobs/:id/save', auth, async (req, res) => {
     }
 });
 
-// 12. CREATE JOB ALERT
 app.post('/alerts', auth, async (req, res) => {
     try {
         const { keyword, location, jobType } = req.body;
@@ -413,7 +394,6 @@ app.post('/alerts', auth, async (req, res) => {
     }
 });
 
-// 13. GET JOB ALERTS
 app.get('/alerts', auth, async (req, res) => {
     try {
         const alerts = await Alert.find({ user: req.user._id });
@@ -423,7 +403,6 @@ app.get('/alerts', auth, async (req, res) => {
     }
 });
 
-// 14. DELETE JOB ALERT
 app.delete('/alerts/:id', auth, async (req, res) => {
     try {
         const alert = await Alert.findById(req.params.id);
@@ -437,7 +416,6 @@ app.delete('/alerts/:id', auth, async (req, res) => {
     }
 });
 
-// 15. ALERTS HISTORY (MATCHING JOBS LIST)
 app.get('/alerts/history', auth, async (req, res) => {
     try {
         const alerts = await Alert.find({ user: req.user._id });
@@ -468,7 +446,6 @@ app.get('/alerts/history', auth, async (req, res) => {
     }
 });
 
-// 16. ANALYTICS (RECRUITER DASHBOARD)
 app.get('/analytics', auth, async (req, res) => {
     try {
         const myJobs = await Job.find({ postedBy: req.user._id });
@@ -500,21 +477,18 @@ app.get('/analytics', auth, async (req, res) => {
     }
 });
 
-// 17. AI-BASED JOB RECOMMENDATIONS
 app.get('/recommendations', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         const userSkills = user.profile.skills || [];
 
         if (userSkills.length === 0) {
-            // If no skills listed, return latest jobs
             const latestJobs = await Job.find().sort({ postedAt: -1 }).limit(10);
             return res.json(latestJobs);
         }
 
         const allJobs = await Job.find().populate('postedBy', 'username');
         
-        // Match algorithms: score each job based on keyword matches
         const scoredJobs = allJobs.map(job => {
             let score = 0;
             const titleLower = job.title.toLowerCase();
@@ -528,11 +502,9 @@ app.get('/recommendations', auth, async (req, res) => {
                 if (titleLower.includes(skillLower)) {
                     score += 5;
                 }
-                // Match in required skills: +3 points per match
                 if (job.skillsRequired && job.skillsRequired.some(s => s.toLowerCase() === skillLower)) {
                     score += 3;
                 }
-                // Match in description: +1 point
                 if (descLower.includes(skillLower)) {
                     score += 1;
                 }
@@ -541,13 +513,11 @@ app.get('/recommendations', auth, async (req, res) => {
             return { job, score };
         });
 
-        // Filter for matching items (score > 0) and sort
         const filteredRecommendations = scoredJobs
             .filter(item => item.score > 0)
             .sort((a, b) => b.score - a.score)
             .map(item => item.job);
 
-        // Fallback to latest jobs if no match found
         if (filteredRecommendations.length === 0) {
             const fallbackJobs = await Job.find().sort({ postedAt: -1 }).limit(5);
             return res.json(fallbackJobs);
