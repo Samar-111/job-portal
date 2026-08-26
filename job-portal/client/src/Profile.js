@@ -16,7 +16,7 @@ function Profile() {
   const [recommendations, setRecommendations] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
 
-  const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://job-portal-nhpx.onrender.com';
+  const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://job-portal-1-wngj.onrender.com';
 
   useEffect(() => {
     if (!token) {

@@ -6,7 +6,7 @@ function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
 
-  const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://job-portal-nhpx.onrender.com';
+  const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://job-portal-1-wngj.onrender.com';
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
