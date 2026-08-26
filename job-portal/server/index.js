@@ -16,7 +16,6 @@ const auth = require('./middleware/auth');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// --- Create Uploads Directory if not exists ---
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir);
